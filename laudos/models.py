@@ -11,7 +11,7 @@ class LaudoTemplate(models.Model):
 
     def save(self, *args, **kwargs):
         # Converte o nome para minúsculas antes de salvar
-        self.name = self.name.lower()
+        self.name = self.name.upper()
         super().save(*args, **kwargs)
 
     def __str__(self):

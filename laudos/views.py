@@ -22,36 +22,6 @@ class HomeView(LoginRequiredMixin, CreateView):
         context['templates'] = LaudoTemplate.objects.filter(user=self.request.user)
         return context
 
-class AddTemplateView(LoginRequiredMixin, CreateView):
-    login_url = 'login'
-    model = LaudoTemplate
-    form_class = LaudoTemplateForm
-    template_name = 'add_template.html'
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user  
-
-        if LaudoTemplate.objects.filter(name=form.instance.name, user=self.request.user).exists():
-            messages.error(self.request, "Já existe um template com esse nome para você.")
-            return redirect('add_template')  
-
-        self.object = form.save()  # Salva o template
-        messages.success(self.request, "Template salvo com sucesso.")  # Mensagem de sucesso
-        return redirect('add_template')  # Mantém na mesma página
-
-    def form_invalid(self, form):
-        messages.error(self.request, "Ocorreu um erro ao salvar o template. Verifique os dados.")
-        return self.render_to_response(self.get_context_data(form=form))
-
-class TemplateListView(LoginRequiredMixin, ListView):
-    login_url = 'login'
-    model = LaudoTemplate
-    template_name = 'template_list.html'
-    context_object_name = 'templates'
-
-    def get_queryset(self):
-        return LaudoTemplate.objects.filter(user=self.request.user)
-
 class LaudoListView(LoginRequiredMixin, ListView):
     login_url = 'login'
     model = Laudo
@@ -89,6 +59,35 @@ class LaudoDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return Laudo.objects.filter(user=self.request.user)
     
+class AddTemplateView(LoginRequiredMixin, CreateView):
+    login_url = 'login'
+    model = LaudoTemplate
+    form_class = LaudoTemplateForm
+    template_name = 'add_template.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user  
+
+        if LaudoTemplate.objects.filter(name=form.instance.name, user=self.request.user).exists():
+            messages.error(self.request, "Já existe um template com esse nome para você.")
+            return redirect('add_template')  
+
+        self.object = form.save()  # Salva o template
+        messages.success(self.request, "Template salvo com sucesso.")  # Mensagem de sucesso
+        return redirect('add_template')  # Mantém na mesma página
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Ocorreu um erro ao salvar o template. Verifique os dados.")
+        return self.render_to_response(self.get_context_data(form=form))
+
+class TemplateListView(LoginRequiredMixin, ListView):
+    login_url = 'login'
+    model = LaudoTemplate
+    template_name = 'template_list.html'
+    context_object_name = 'templates'
+
+    def get_queryset(self):
+        return LaudoTemplate.objects.filter(user=self.request.user)
 
 class TemplateDetailView(LoginRequiredMixin, DetailView):
     login_url = 'login'
@@ -129,6 +128,7 @@ class TemplateDeleteView(LoginRequiredMixin, DeleteView):
     login_url = 'login'
     model = LaudoTemplate
     template_name = 'template_confirm_delete.html'
+    context_object_name = 'template'
     success_url = reverse_lazy('template_list')
 
     def get_queryset(self):

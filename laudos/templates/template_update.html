@@ -30,8 +30,14 @@
                     <div id="editor-container" style="height: 300px;">{{ template.content|safe }}</div>
                     <input type="hidden" name="content" id="content">
                 </div>
-                <button type="submit" class="btn btn-primary">Salvar</button>
-                <a href="{% url 'template_list' %}" class="btn btn-secondary">Voltar</a>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Salvar
+                    </button>
+                    <a href="{% url 'laudo_list' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </a>
+                </div>
             </form>
         </div>
     </main>
